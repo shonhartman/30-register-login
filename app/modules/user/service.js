@@ -4,7 +4,7 @@ class UserService {
     this._$firebaseObject = $firebaseObject;
 
     /* STEP 1 - ADD YOUR URL HERE */
-    this.ref = new Firebase("your firebase url");
+    this.ref = new Firebase("https://30-register-login.firebaseio.com/");
     this.auth = $firebaseAuth(this.ref);
   }
 
@@ -21,16 +21,32 @@ class UserService {
   */
   login(user) {
     return new this._$q((resolve, reject) => {
+      $scope.authObj.$authWithPassword({
+        email: "my@email.com",
+        password: "mypassword"
+      })
+      .then(function(authData) {
+        console.log("Logged in as:", authData.uid);
+      })
+      .catch(function(error) {
+        console.error("Authentication failed:", error);
+      });
     });
   }
 
   /* STEP 3 - Unauthorize the user. Firebase API docs! */
   logout() {
+    this.user = undefined;
+    this.auth.$unauth();
   }
 
   /* STEP 4 - Return an object representing a "new" user with
     a blanK email and password */
   new() {
+    return {
+      name: "",
+      completed: false
+    }
   }
 
   /* STEP 5 - Below is a promise. Inside of it, use $createUser
@@ -45,6 +61,16 @@ class UserService {
   */
   create(user) {
     return new this._$q((resolve, reject) => {
+      this.auth.$createUser(user)
+      .then((response) => {
+        return this.auth.$authWithPassword(user);
+      })
+      .then((response) => {
+        this.user = response;
+      })
+      .catch(function(error) {
+        console.error("Error: ", error)
+      })
     });
   }
 
