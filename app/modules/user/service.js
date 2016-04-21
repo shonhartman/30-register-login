@@ -1,7 +1,6 @@
 class UserService {
   constructor($q, $firebaseAuth) {
     this._$q = $q;
-    this._$firebaseObject = $firebaseObject;
 
     /* STEP 1 - ADD YOUR URL HERE */
     this.ref = new Firebase("https://30-register-login.firebaseio.com/");
@@ -21,12 +20,12 @@ class UserService {
   */
   login(user) {
     return new this._$q((resolve, reject) => {
-      $scope.authObj.$authWithPassword({
-        email: "my@email.com",
-        password: "mypassword"
-      })
+      this.auth.$authWithPassword(user)
       .then(function(authData) {
         console.log("Logged in as:", authData.uid);
+        // save this.user and use $state.go
+        this.user.$save().$state.go("login");
+
       })
       .catch(function(error) {
         console.error("Authentication failed:", error);
@@ -44,8 +43,8 @@ class UserService {
     a blanK email and password */
   new() {
     return {
-      name: "",
-      completed: false
+      email: "",
+      password: ""
     }
   }
 
@@ -67,6 +66,9 @@ class UserService {
       })
       .then((response) => {
         this.user = response;
+        // redirect with $state.go
+        $state.go('login');
+
       })
       .catch(function(error) {
         console.error("Error: ", error)

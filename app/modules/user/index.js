@@ -2,9 +2,11 @@
 
 import angular from 'angular';
 
-import profileController from './controller/profile';
-import loginController from './controller/login';
-import registerController from './controller/register';
+import config from './config';
+import profileController from './controllers/profile';
+import loginController from './controllers/login';
+import registerController from './controllers/register';
+import service from './service';
 
 let user = angular.module('tiy.user', []);
 

@@ -10,16 +10,22 @@ class ProfileController {
       to the login page.
     */
     this._UserService
-    .isLoggedIn() {
-      .then((resonse) => {
+    .isLoggedIn()
+      .then((response) => {
         this.user = response;
       })
       .catch((error) => {
         this.$state.go("login");
-      })
-
+      });
     }
-  }
+
+
+
+
+
+
+
+
 
 
   /* STEP 2 - Call the UserService logout function, then use $state.go
@@ -28,6 +34,10 @@ class ProfileController {
     this._UserService.logout();
     this._$state.go("login");
   }
+
 }
+
+
+
 
 export default ProfileController;
